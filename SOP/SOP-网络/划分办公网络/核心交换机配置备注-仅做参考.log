@@ -1,0 +1,320 @@
+﻿core-switch#show run
+!Device running configuration:
+!version V210R230
+!2100/09/15 05:49:15
+!
+ no auth-degenerate
+!
+ logging history 6
+!
+!以下是配置设备登录账号和密码
+ username admin group administrators password $1$kijv$cKqeUjVBUm8dwW/1039yw1 
+ username admin domain all
+!以上是配置设备登录账号和密码
+!
+ user privilege level administrators password $9$kijv$e7015e4ca31c3ae839aa564bc4b0f361 
+ user privilege level operators password $9$kijv$e7015e4ca31c3ae839aa564bc4b0f361 
+ user privilege level users password $9$kijv$e7015e4ca31c3ae839aa564bc4b0f361 
+ user privilege level guests password $9$kijv$e7015e4ca31c3ae839aa564bc4b0f361 
+!
+!以下是配置设备主机名
+ hostname core-switch
+!以上是配置设备主机名
+ device ddm disable
+!
+ snmp trap-history 1024
+!
+ voltage monitor disable
+!
+ power monitor disable
+!
+!以下是配置ACL访问控制列表
+ filter-list 1001 name deny-access-vlan13-vlan14
+ filter 1 ip 172.16.10.0/24 172.16.13.0/24
+ filter 1 action deny
+
+ filter 2 ip 172.16.10.0/24 172.16.14.0/24
+ filter 2 action deny
+
+ filter 3 ip 172.16.20.0/24 172.16.13.0/24
+ filter 3 action deny
+
+ filter 4 ip 172.16.20.0/24 172.16.14.0/24
+ filter 4 action deny
+
+ filter 255 ip any any
+ filter 255 action permit
+
+ filter-list 1002 name deny-access-intenal
+ filter 1 ip 172.16.22.0/24 172.16.0.0/16
+ filter 1 action deny
+
+ filter 2 ip 172.16.22.0/24 10.0.0.0/8
+ filter 2 action deny
+
+ filter 255 ip any any
+ filter 255 action permit
+
+ filter-list global in 1001
+ filter-list global in 1002
+!以上是配置ACL访问控制列表
+!
+!以下是配置vlan
+vlan 1
+ alias device-manager
+vlan 10  
+ alias yanfa
+vlan 11
+ alias yewu
+vlan 12
+ alias server-test
+vlan 13
+ alias jifang1
+vlan 14
+ alias jiankong
+vlan 15
+ alias jifang2
+vlan 20
+ alias yanfa-wireless
+vlan 21
+ alias yewu-wireless
+vlan 22
+ alias guest-wireless
+vlan 254
+ alias ap-manager
+vlan 255
+ alias to-firewall
+!以上是配置vlan
+!
+!以下是配置DHCP服务器
+ dhcp start
+ dhcp pool 10
+ network range 172.16.10.2 172.16.10.254 mask 255.255.255.0
+ gateway 172.16.10.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 11
+ network range 172.16.11.2 172.16.11.254 mask 255.255.255.0
+ gateway 172.16.11.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 12
+ network range 172.16.12.101 172.16.12.254 mask 255.255.255.0
+ gateway 172.16.12.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 13
+ network range 172.16.13.2 172.16.13.254 mask 255.255.255.0
+ gateway 172.16.13.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 15
+ network range 10.8.0.101 10.8.20.254 mask 255.255.0.0
+ gateway 10.8.0.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 20
+ network range 172.16.20.2 172.16.20.254 mask 255.255.255.0
+ gateway 172.16.20.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 21
+ network range 172.16.21.2 172.16.21.254 mask 255.255.255.0
+ gateway 172.16.21.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 22
+ network range 172.16.22.2 172.16.22.254 mask 255.255.255.0
+ gateway 172.16.22.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+ dhcp pool 64
+ network range 172.16.254.10 172.16.254.254 mask 255.255.255.0
+ gateway 172.16.254.1
+ dns 202.96.134.133
+ dns 202.96.128.68 backup
+!以上是配置DHCP服务器
+!
+interface ethernet 0/0/0
+!
+!以下是配置vlan接口和IP地址        
+interface vlan 1
+ ip address 172.16.1.1/24
+interface vlan 10
+ ip address 172.16.10.1/24
+ ip dhcp server
+interface vlan 11
+ ip address 172.16.11.1/24
+ ip dhcp server
+interface vlan 12
+ ip address 172.16.12.1/24
+ ip dhcp server
+interface vlan 13
+ ip address 172.16.13.1/24
+ ip dhcp server
+interface vlan 14
+ ip address 172.16.14.1/24
+interface vlan 15
+ ip address 10.8.0.1/16
+ ip dhcp server
+interface vlan 20
+ ip address 172.16.20.1/24
+ ip dhcp server
+interface vlan 21
+ ip address 172.16.21.1/24
+ ip dhcp server
+interface vlan 22
+ ip address 172.16.22.1/24
+ ip dhcp server
+interface vlan 254
+ ip address 172.16.254.1/24
+ ip dhcp server
+interface vlan 255
+ ip address 172.16.255.1/24
+!以上是配置vlan接口和IP地址  
+!
+ syslog facility kernel
+!
+ snmp location Wuhan-China
+ snmp contact Inspur-Cisco networking technology Co.Ltd.
+!
+ cmu card trap disable
+!
+ arp learning strict disable
+!
+line console 1
+ length 24
+ timeout 10 0
+ login authentication local
+ language english
+ no color
+line vty 1 5
+ length 24
+ no monitor
+ timeout 10 0
+ login authentication local
+ language english
+ no color
+!
+!
+!
+interface gigaethernet 1/0/1
+!
+interface gigaethernet 1/0/2
+!
+interface gigaethernet 1/0/3
+!
+interface gigaethernet 1/0/4
+!
+interface gigaethernet 1/0/5
+!
+interface gigaethernet 1/0/6
+!
+interface gigaethernet 1/0/7
+!
+interface gigaethernet 1/0/8
+!        
+interface gigaethernet 1/0/9
+!
+interface gigaethernet 1/0/10
+!
+interface gigaethernet 1/0/11
+!
+interface gigaethernet 1/0/12
+!
+interface gigaethernet 1/0/13
+!
+interface gigaethernet 1/0/14
+!
+interface gigaethernet 1/0/15
+!
+interface gigaethernet 1/0/16
+!
+interface gigaethernet 1/0/17
+!
+interface gigaethernet 1/0/18
+!
+interface gigaethernet 1/0/19
+!
+interface gigaethernet 1/0/20
+!
+interface gigaethernet 1/0/21
+!
+interface gigaethernet 1/0/22
+!
+!以下是配置连接无线控制器的物理接口
+interface gigaethernet 1/0/23
+ port link-type access
+ port default vlan 254
+ no shutdown
+!以上是配置连接无线控制器的物理接口
+!
+!以下是配置连接防火墙的物理接口
+interface gigaethernet 1/0/24
+ port link-type access
+ port default vlan 255
+ no shutdown
+!以上是配置连接防火墙的物理接口
+!
+!以下是配置连接交换机的物理接口
+interface xgigaethernet 2/0/1
+ port link-type trunk
+ port trunk allow-pass vlan 10-15,20-22,254-255
+ no shutdown
+!
+interface xgigaethernet 2/0/2
+ port link-type trunk
+ port trunk allow-pass vlan 10-15,20-22,254-255
+ no shutdown
+!
+interface xgigaethernet 2/0/3
+ port link-type trunk
+ port trunk allow-pass vlan 10-15,20-22,254-255
+ no shutdown
+!
+interface xgigaethernet 2/0/4
+ port link-type trunk
+ port trunk allow-pass vlan 10-15,20-22,254-255
+ no shutdown
+!
+interface xgigaethernet 2/0/5
+ port link-type trunk
+ port trunk allow-pass vlan 10-15,20-22,254-255
+ no shutdown
+!
+interface xgigaethernet 2/0/6
+ port link-type trunk
+ port trunk allow-pass vlan 10-15,20-22,254-255
+ no shutdown
+!以上是配置连接交换机的物理接口
+!
+interface xgigaethernet 2/0/7
+!
+interface xgigaethernet 2/0/8
+!
+interface xgigaethernet 2/0/9
+!
+interface xgigaethernet 2/0/10
+!
+interface xgigaethernet 2/0/11
+!
+interface xgigaethernet 2/0/12
+!
+interface xgigaethernet 2/0/13
+!
+interface xgigaethernet 2/0/14
+!
+interface xgigaethernet 2/0/15
+!
+interface xgigaethernet 2/0/16
+!
+!
+!以下是配置默认路由
+ ip route-static 0.0.0.0 0.0.0.0 172.16.255.254 
+!以上是配置默认路由
+!
+!end
+      
+核心交换机保存配置的命令：write file
+接入交换机保存配置的命令：write memory
+
