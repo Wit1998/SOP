@@ -7,7 +7,7 @@ systemctl status NetworkManger
 
 ```
 
-```
+```bash
 1、查看网络接口信息(device)
 nmcli
 nmcli device status
@@ -23,7 +23,7 @@ nmcli connection [up/down] [connection-name] # 打开/取消连接
 nmcli device [connect/disconnect] interface-name # 激活/取消接口
 ```
 
-```
+```bash
 4、创建动态ip地址连接
 nmcli connection add type [ethernet/] con-name [connection-name] ifname [interface-name]
 5、创建静态ip地址连接
